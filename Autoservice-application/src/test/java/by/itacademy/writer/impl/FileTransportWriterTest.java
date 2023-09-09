@@ -24,7 +24,6 @@ class FileTransportWriterTest {
     private final File validTransportActual = Path.of("src", "test", "resources", "validTransportActual.json").toFile();
     private final File invalidTransportFile = Path.of("src", "test", "resources", "invalidTransportFile.json").toFile();
     private final File invalidTransportActual = Path.of("src", "test", "resources", "invalidTransportActual.json").toFile();
-    private final Comparator<Transport> testComparator = Comparator.comparing(Transport::getTransportType);
 
     @BeforeEach
     void setUp() {
@@ -33,18 +32,22 @@ class FileTransportWriterTest {
         validTransportList.add(new Transport(TransportType.MINIBUS, "Sprinter264"));
         invalidTransportList.add(new Transport(TransportType.AUTOMOBILE, "Audi Q9!№"));
         invalidTransportList.add(new Transport(TransportType.MOTORCYCLE, "Ninja **"));
+    }
 
+    @AfterEach
+    void finishTest() {
+        invalidTransportFile.delete();
+        validTransportFile.delete();
     }
 
     @Test
     void testWrite_happyPath() throws TransportWriterException, IOException {
-
         Map<String, List<Transport>> processedTransport = new HashMap<>();
         processedTransport.put("validTransport", validTransportList);
         processedTransport.put("invalidTransport", invalidTransportList);
 
         final var writer = new FileTransportWriter(validTransportFile, invalidTransportFile);
-        writer.write(processedTransport, testComparator);
+        writer.write(processedTransport);
 
         Assertions.assertEquals(Files.readAllLines(validTransportFile.toPath()), Files.readAllLines(validTransportActual.toPath()));
         Assertions.assertEquals(Files.readAllLines(invalidTransportFile.toPath()), Files.readAllLines(invalidTransportActual.toPath()));
@@ -52,7 +55,6 @@ class FileTransportWriterTest {
 
     @Test
     void testWriter_throwException() throws IOException {
-
         validTransportFile.createNewFile();
         validTransportFile.setReadOnly();
         invalidTransportFile.createNewFile();
@@ -63,15 +65,9 @@ class FileTransportWriterTest {
         processedTransport.put("invalidTransport", invalidTransportList);
 
         final var writer = new FileTransportWriter(validTransportFile, invalidTransportFile);
-        final Exception fileWriterException = assertThrows(TransportWriterException.class, () -> writer.write(processedTransport, testComparator));
+        final var fileWriterException = assertThrows(TransportWriterException.class, () -> writer.write(processedTransport));
 
         assertNotNull(fileWriterException, "fileWriterException is null");
         assertEquals("Ошибка записи файла", fileWriterException.getMessage());
-    }
-
-    @AfterEach
-    void finishTest() {
-        invalidTransportFile.delete();
-        validTransportFile.delete();
     }
 }

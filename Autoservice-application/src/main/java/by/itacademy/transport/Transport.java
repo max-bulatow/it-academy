@@ -26,10 +26,19 @@ public class Transport {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Transport transport = (Transport) o;
         return Objects.equals(transportType, transport.transportType) && Objects.equals(model, transport.model) && Objects.equals(transportType.getPrice(), transport.transportType.getPrice());
+    }
+
+    @Override
+    public String toString() {
+        return new String(transportType.name() +" "+ model + " " + transportType.getPrice().toString());
     }
 
 }

@@ -1,9 +1,11 @@
 package by.itacademy.sorter;
 
+
 import by.itacademy.transport.Transport;
 
-import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 public interface SorterReading {
-    Comparator<Transport> readSorting() throws SorterReaderException;
+    Map<String, List<Transport>> readSorting(Map<String, List<Transport>> processedTransport) throws SorterReaderException;
 }

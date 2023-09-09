@@ -7,14 +7,11 @@ import by.itacademy.transport.Transport;
 import by.itacademy.transport.TransportType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@ExtendWith(MockitoExtension.class)
 class TransportJsonReaderTest {
 
     private static final String TEST_FILE_NAME = "testTransport.json";
@@ -23,7 +20,6 @@ class TransportJsonReaderTest {
 
     @Test
     void testRead_happyPath() throws TransportParserException, TransportReaderException {
-
         final List<Transport> transportList = new ArrayList<>();
         transportList.add(new Transport(TransportType.MOTORCYCLE, "Ninja ZX-14"));
         transportList.add(new Transport(TransportType.AUTOMOBILE, "Audi Q7"));
@@ -36,6 +32,7 @@ class TransportJsonReaderTest {
 
         Assertions.assertEquals(actualTransport, transportList);
         Mockito.verify(parser).parse(TEST_FILE_CONTENT);
+        Mockito.verifyNoMoreInteractions(parser);
 
     }
 

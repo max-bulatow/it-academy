@@ -31,7 +31,6 @@ class TransportJsonParserTest {
     @Test
     void testParse_parserThrowException() {
         final String content = "[  {    \"ttype\": \"motorcycle\",    \"model\": \"Ninja ZX-14\"  },  {    \"type\": \"automobile\",    \"model\": \"Audi Q7\"  }  ]";
-
         final TransportJsonParser parser = new TransportJsonParser();
 
         final Exception transportParserException = assertThrows(TransportParserException.class, () -> parser.parse(content));

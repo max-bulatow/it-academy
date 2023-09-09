@@ -2,7 +2,7 @@ package by.itacademy.validator.impl;
 
 import by.itacademy.transport.Transport;
 import by.itacademy.transport.TransportType;
-import by.itacademy.validator.validator;
+import by.itacademy.validator.Validator;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -19,10 +19,10 @@ class TransportValidatorTest {
         final List<Transport> validTransportList = new ArrayList<>();
         final List<Transport> invalidTransportList = new ArrayList<>();
 
-        final validator validator = new TransportValidator();
+        final Validator validator = new TransportValidator();
 
-        final Transport validTransport = new Transport(TransportType.MOTORCYCLE, "Ninja ZX-14");
-        final Transport invalidTransport = new Transport(TransportType.AUTOMOBILE, "Audi Q9!№");
+        final var validTransport = new Transport(TransportType.MOTORCYCLE, "Ninja ZX-14");
+        final var invalidTransport = new Transport(TransportType.AUTOMOBILE, "Audi Q9!№");
 
         transportList.add(validTransport);
         transportList.add(invalidTransport);

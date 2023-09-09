@@ -10,8 +10,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -29,47 +29,37 @@ public class FileTransportWriter implements TransportWriter {
     }
 
     @Override
-    public List<TransportDestination> write(final Map<String, List<Transport>> processedTransport, Comparator<Transport> comparator) throws TransportWriterException {
+    public List<TransportDestination> write(final Map<String, List<Transport>> processedTransport) throws TransportWriterException {
         final TransportDestination invalidDestination = new TransportDestination("JSON файл транспорта с ошибками",
                 invalidTransportFile);
         final TransportDestination processedDestination = new TransportDestination("JSON файл продиагностированного транспорта",
                 processedTransportFile);
 
-        try (final BufferedWriter validTransportWriter = new BufferedWriter(new FileWriter(processedTransportFile));
-             final BufferedWriter invalidTransportWriter = new BufferedWriter(new FileWriter(invalidTransportFile))) {
+        writer(processedTransport.get(VALID_TRANSPORT), true);
+        writer(processedTransport.get(INVALID_TRANSPORT), false);
 
-            processedTransport.get(VALID_TRANSPORT).sort(comparator);
+        return List.of(processedDestination, invalidDestination);
+    }
 
-            final JSONObject validTransportJsonObject = new JSONObject();
-            final List<String> validTransportJsonList = new ArrayList<>();
-            int index;
-            for (index = 0; index < processedTransport.get(VALID_TRANSPORT).size(); index++) {
+    private void writer(final List<Transport> transportList, final boolean isValid) throws TransportWriterException {
+        final File outFile = isValid ? processedTransportFile : invalidTransportFile;
 
-                validTransportJsonObject.put("type", processedTransport.get(VALID_TRANSPORT).get(index).getTransportType());
-                validTransportJsonObject.put("model", processedTransport.get(VALID_TRANSPORT).get(index).getModel());
-                validTransportJsonObject.put("price", processedTransport.get(VALID_TRANSPORT).get(index).getTransportType().getPrice());
-                validTransportJsonList.add(validTransportJsonObject.toString(4));
+        final List<String> invalidJsonObjectList = new ArrayList<>(transportList.size());
+        try (final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(outFile, StandardCharsets.UTF_8))) {
 
+            for (Transport transport : transportList) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("type", transport.getTransportType());
+                jsonObject.put("model", transport.getModel());
+
+                if (isValid) {
+                    jsonObject.put("price", transport.getPrice());
+                }
+                invalidJsonObjectList.add(jsonObject.toString(4));
             }
-
-            validTransportWriter.write(validTransportJsonList.toString());
-            validTransportWriter.flush();
-
-            final JSONObject invalidTransportJsonObject = new JSONObject();
-            final List<String> invalidTransportJsonList = new ArrayList<>();
-            int indeks;
-            for (indeks = 0; indeks < processedTransport.get(INVALID_TRANSPORT).size(); indeks++) {
-
-                invalidTransportJsonObject.put("type", processedTransport.get(INVALID_TRANSPORT).get(indeks).getTransportType());
-                invalidTransportJsonObject.put("model", processedTransport.get(INVALID_TRANSPORT).get(indeks).getModel());
-                invalidTransportJsonList.add(invalidTransportJsonObject.toString(4));
-
-            }
-            invalidTransportWriter.write(invalidTransportJsonList.toString());
-            invalidTransportWriter.flush();
+            bufferedWriter.write(invalidJsonObjectList.toString());
         } catch (final IOException exception) {
             throw new TransportWriterException("Ошибка записи файла", exception);
         }
-        return List.of(processedDestination, invalidDestination);
     }
 }

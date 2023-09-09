@@ -3,20 +3,20 @@ package by.itacademy.sorter;
 import by.itacademy.transport.Transport;
 
 import java.util.Comparator;
-import java.util.function.Function;
 
 public enum SortingType {
-    TYPE(transport -> transport.getTransportType().name()),
-    MODEL(Transport::getModel),
-    PRICE(Transport::getPrice);
+    TYPE(Comparator.comparing(transport -> transport.getTransportType().name())),
+    MODEL(Comparator.comparing(Transport::getModel)),
+    PRICE(Comparator.comparing(Transport::getPrice));
 
-    private final Comparator<Transport> transportComparator;
 
-    <T extends Comparable<T>> SortingType(final Function<Transport, T> function) {
-        this.transportComparator = Comparator.comparing(function);
+    private final Comparator<Transport> comparator;
+
+    SortingType(final Comparator<Transport> comparator) {
+        this.comparator = comparator;
     }
 
-    public Comparator<Transport> getTransportComparator() {
-        return transportComparator;
+    public Comparator<Transport> getComparator() {
+        return comparator;
     }
 }

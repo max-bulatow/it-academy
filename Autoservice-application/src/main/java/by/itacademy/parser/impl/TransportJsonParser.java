@@ -19,7 +19,7 @@ public class TransportJsonParser implements TransportParser {
         final JSONArray jsonTransportArray = new JSONArray(content);
 
         try {
-            for (Object transport : jsonTransportArray) {
+            for (final Object transport : jsonTransportArray) {
                 final JSONObject transportJsonObject = (JSONObject) transport;
 
                 final String type = transportJsonObject.getString("type");
