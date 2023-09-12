@@ -17,12 +17,13 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ConsoleSorterReaderTest {
-    final List<Transport> validTransport = new ArrayList<>();
+
     final Map<String, List<Transport>> processedTransport = new HashMap<>();
-    final static String VALID_TRANSPORT = "validTransport";
+    final String VALID_TRANSPORT = "validTransport";
 
     @BeforeEach
     void setUp() {
+        final List<Transport> validTransport = new ArrayList<>();
         validTransport.add(new Transport(TransportType.AUTOMOBILE, "Audi Q7"));
         validTransport.add(new Transport(TransportType.AUTOMOBILE, "BMW M5"));
         validTransport.add(new Transport(TransportType.MINIBUS, "Sprinter264"));
@@ -36,7 +37,6 @@ class ConsoleSorterReaderTest {
         final ConsoleReader consoleReader = Mockito.mock(ConsoleReader.class);
         final ConsoleSorterReader reader = new ConsoleSorterReader(consoleReader);
         Mockito.when(consoleReader.nextLine()).thenReturn("model forward").thenReturn("type forward").thenReturn("price reverse");
-
 
         final Map <String, List <Transport>> actualSorter = reader.readSorting(processedTransport);
         final String actual = actualSorter.get(VALID_TRANSPORT).toString();

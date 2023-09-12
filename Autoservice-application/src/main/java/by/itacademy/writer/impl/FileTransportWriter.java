@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static by.itacademy.AutoserviceApplication.INVALID_TRANSPORT;
-import static by.itacademy.AutoserviceApplication.VALID_TRANSPORT;
+import static by.itacademy.validator.impl.TransportValidator.INVALID_TRANSPORT;
+import static by.itacademy.validator.impl.TransportValidator.VALID_TRANSPORT;
 
 public class FileTransportWriter implements TransportWriter {
 

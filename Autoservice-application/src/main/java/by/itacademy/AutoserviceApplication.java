@@ -18,9 +18,10 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import static by.itacademy.validator.impl.TransportValidator.INVALID_TRANSPORT;
+import static by.itacademy.validator.impl.TransportValidator.VALID_TRANSPORT;
+
 public class AutoserviceApplication {
-    public static final String VALID_TRANSPORT = "validTransport";
-    public static final String INVALID_TRANSPORT = "invalidTransport";
 
     public static void main(String[] args) {
 

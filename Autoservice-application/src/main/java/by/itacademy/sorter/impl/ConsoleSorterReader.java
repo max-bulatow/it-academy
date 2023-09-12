@@ -5,7 +5,7 @@ import by.itacademy.transport.Transport;
 
 import java.util.*;
 
-import static by.itacademy.AutoserviceApplication.VALID_TRANSPORT;
+import static by.itacademy.validator.impl.TransportValidator.VALID_TRANSPORT;
 
 public class ConsoleSorterReader implements SorterReading {
 

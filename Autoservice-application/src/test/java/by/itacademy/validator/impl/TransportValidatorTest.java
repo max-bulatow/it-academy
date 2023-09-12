@@ -33,8 +33,8 @@ class TransportValidatorTest {
         final var mapTransport = validator.mapTransportList("valid", "invalid", transportList);
 
         assertNotNull(mapTransport, "mapTransport is null");
-        assertEquals(mapTransport.get("valid"), validTransportList, "коллекция валидного транспорта пуста");
-        assertEquals(mapTransport.get("invalid"), invalidTransportList, "коллекция невалидного транспорта пуста");
+        assertEquals(mapTransport.get("validTransport"), validTransportList);
+        assertEquals(mapTransport.get("invalidTransport"), invalidTransportList, "коллекция невалидного транспорта пуста");
 
     }
 }
