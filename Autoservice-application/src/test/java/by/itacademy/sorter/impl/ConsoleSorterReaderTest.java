@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ConsoleSorterReaderTest {
 
-    final Map<String, List<Transport>> processedTransport = new HashMap<>();
-    final String VALID_TRANSPORT = "validTransport";
+    private final Map<String, List<Transport>> processedTransport = new HashMap<>();
+    private final String VALID_TRANSPORT = "validTransport";
 
     @BeforeEach
     void setUp() {

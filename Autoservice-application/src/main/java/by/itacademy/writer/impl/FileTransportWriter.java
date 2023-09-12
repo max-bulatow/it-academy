@@ -47,8 +47,8 @@ public class FileTransportWriter implements TransportWriter {
         final List<String> invalidJsonObjectList = new ArrayList<>(transportList.size());
         try (final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(outFile, StandardCharsets.UTF_8))) {
 
-            for (Transport transport : transportList) {
-                JSONObject jsonObject = new JSONObject();
+            for (final Transport transport : transportList) {
+                final JSONObject jsonObject = new JSONObject();
                 jsonObject.put("type", transport.getTransportType());
                 jsonObject.put("model", transport.getModel());
 

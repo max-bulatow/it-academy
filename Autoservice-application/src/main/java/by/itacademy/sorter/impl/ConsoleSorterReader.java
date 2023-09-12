@@ -24,7 +24,7 @@ public class ConsoleSorterReader implements SorterReading {
 
 
     @Override
-    public Map<String, List<Transport>> readSorting(Map<String, List<Transport>> processedTransport) throws SorterReaderException {
+    public Map<String, List<Transport>> readSorting(final Map<String, List<Transport>> processedTransport) throws SorterReaderException {
         final Map<SortingType, SortingDirection> sorterMap = new HashMap<>();
 
         try {

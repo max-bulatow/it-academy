@@ -42,7 +42,7 @@ class FileTransportWriterTest {
 
     @Test
     void testWrite_happyPath() throws TransportWriterException, IOException {
-        Map<String, List<Transport>> processedTransport = new HashMap<>();
+        final Map<String, List<Transport>> processedTransport = new HashMap<>();
         processedTransport.put("validTransport", validTransportList);
         processedTransport.put("invalidTransport", invalidTransportList);
 
@@ -60,7 +60,7 @@ class FileTransportWriterTest {
         invalidTransportFile.createNewFile();
         invalidTransportFile.setReadOnly();
 
-        Map<String, List<Transport>> processedTransport = new HashMap<>();
+        final Map<String, List<Transport>> processedTransport = new HashMap<>();
         processedTransport.put("validTransport", validTransportList);
         processedTransport.put("invalidTransport", invalidTransportList);
 

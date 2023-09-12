@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface SorterReading {
-    Map<String, List<Transport>> readSorting(Map<String, List<Transport>> processedTransport) throws SorterReaderException;
+    Map<String, List<Transport>> readSorting(final Map<String, List<Transport>> processedTransport) throws SorterReaderException;
 }
