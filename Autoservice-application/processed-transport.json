@@ -11,6 +11,10 @@
     "model": "Mazda CX7",
     "type": "AUTOMOBILE"
 }, {
+    "price": 10,
+    "model": "Ninja ZX-14",
+    "type": "MOTORCYCLE"
+}, {
     "price": 30,
     "model": "Sprinter264",
     "type": "MINIBUS"
@@ -18,8 +22,4 @@
     "price": 30,
     "model": "Transporter T5",
     "type": "MINIBUS"
-}, {
-    "price": 10,
-    "model": "Ninja ZX-14",
-    "type": "MOTORCYCLE"
 }]
