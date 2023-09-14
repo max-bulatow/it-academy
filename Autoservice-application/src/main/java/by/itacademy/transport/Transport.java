@@ -4,10 +4,10 @@ import java.util.Objects;
 
 public class Transport {
     /*Поле для хранения типа транспорта. private - т.к. должно быть доступно только внутри класса Transport
-    final - т.к. не будет изменяться*/
+    final - т.к. его ссылка не должна меняться*/
     private final TransportType transportType;
     /*Поле для хранения модели транспорта. private - т.к. должно быть доступно только внутри класса Transport
-    final - т.к. не будет изменяться*/
+    final - т.к. его ссылка не должна меняться*/
     private final String model;
 
     //Конструктор класса Transport. public - т.к. должен быть доступен другим классам в других пакетах
@@ -45,6 +45,12 @@ public class Transport {
         //Сравниваем поля объектов, если два объекта имеют одинаковые значения полей, то объекты совпадают
         Transport transport = (Transport) o;
         return transportType == transport.transportType && Objects.equals(model, transport.model);
+    }
+
+    //Переопределение метода hashCode для сравнения объектов класса Transport
+    @Override
+    public int hashCode() {
+        return Objects.hash(transportType, model);
     }
 
     //Переопределяем метод toString для вывода в необходимом нам виде

@@ -11,12 +11,12 @@ import java.util.regex.Pattern;
 
 public class TransportValidator implements Validator {
     /*Поле modelValidator типа класса Pattern - шаблон для поиска валидных значений моделей транспорта
-    private - используется только внутри класса TransportValidator; final - не должна изменяться после инициализации*/
+    private - используется только внутри класса TransportValidator; final - т.к. его ссылка не должна меняться*/
     private final Pattern modelValidator = Pattern.compile("^[a-zA-Z]((\\s|-)?[a-zA-Z0-9])*$");
 
     /*Поле типа String, которое будет использоваться в качестве ключа для Map
     public - должно быть доступно другим классам в других пакетах; static - константа должна быть общая для всего класса
-    и вызываться без создания объекта класса; final - т.к. не должна изменяться после инициализации*/
+    и вызываться без создания объекта класса; final - т.к. его ссылка не должна меняться*/
     public static final String VALID_TRANSPORT = "validTransport";
 
     /*Аналогично выше*/
@@ -24,19 +24,19 @@ public class TransportValidator implements Validator {
 
     /*Реализуем метод mapTransportList интерфейса Validator*/
     @Override
-    public Map<String, List<Transport>> mapTransportList(final String validTransport,final String invalidTransport,final List<Transport> transportList) {
+    public Map<String, List<Transport>> mapTransportList(final String validTransport, final String invalidTransport, final List<Transport> transportList) {
 
-        /*Объявляется интерфейс Map c ключом типа String и значением List, типизируемом классом Transport для хранения
-        коллекций валидного и невалидного транспорта; final - т.к. после его заполнения не должен меняться*/
+        /*Создается HashMap c ключом типа String и значением List, типизируемом классом Transport для хранения
+        коллекций валидного и невалидного транспорта; final - т.к. его ссылка не должна меняться*/
         final Map<String, List<Transport>> processedTransport = new HashMap<>();
         /*Объявляется коллекция List типизируемая классом Transport для хранения валидного транспорта
-        final - т.к. после ее заполнения не должна меняться*/
+        final - т.к. ее ссылка не должна меняться*/
         final List<Transport> validTransportList = new ArrayList<>();
         /*Аналогично для хранения невалидного транспорта*/
         final List<Transport> invalidTransportList = new ArrayList<>();
 
         /*В цикле for-each пробегаемся по коллекции transportList с помощью итерационной переменной transport
-        final - т.к. во время одной итерации цикла значение transport не должно меняться*/
+        final - т.к. ссылка на итерационную переменную transport не должна меняться при прохождении по коллекции*/
         for (final Transport transport : transportList) {
             /*Если поле model объекта transport соответствует шаблону matcherValidator, то мы заносим этот объект в
             коллекцию validTransportList, иначе в коллекцию invalidTransportList*/
