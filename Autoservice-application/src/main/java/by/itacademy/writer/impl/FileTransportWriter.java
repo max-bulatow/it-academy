@@ -56,9 +56,8 @@ public class FileTransportWriter implements TransportWriter {
         /*Создается переменная типа File в которой храниться ссылка на файл для записи валидного или невалидного транспорта
         final - т.к. ссылка не должна меняться*/
         final File outFile = isValid ? processedTransportFile : invalidTransportFile;
-
         /*Создается коллекция List типизируемая классом String; final - т.к. ее ссылка не должна меняться*/
-        final List<String> invalidJsonObjectList = new ArrayList<>(transportList.size());
+        final List<String> JsonObjectList = new ArrayList<>(transportList.size());
         /*Используем try-with-resources для записи файлов*/
         try (final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(outFile, StandardCharsets.UTF_8))) {
 
@@ -71,19 +70,19 @@ public class FileTransportWriter implements TransportWriter {
                 jsonObject.put("type", transport.getTransportType());
                 jsonObject.put("model", transport.getModel());
 
-                /*Если транспорт валиден, то помещаем в jsonObject цену с ключом price иначе добавляем jsonObject в
-                коллекцию невалидного транспорта*/
+                /*Если транспорт валиден, то помещаем в jsonObject цену с ключом price и добавляем его в коллекцию для записи
+                иначе добавляем jsonObject в коллекцию для записи*/
                 if (isValid) {
                     jsonObject.put("price", transport.getPrice());
+                    JsonObjectList.add(jsonObject.toString(4));
                 } else {
-                    invalidJsonObjectList.add(jsonObject.toString(4));
+                    JsonObjectList.add(jsonObject.toString(4));
                 }
             }
-            /*Записываем коллекцию невалижного транспорта в файл*/
-            bufferedWriter.write(invalidJsonObjectList.toString());
+            /*Записываем коллекцию транспорта в файл*/
+            bufferedWriter.write(JsonObjectList.toString());
             /*В случае возникновения ошибки отлавливаем ее в блоке catch и выбрасываем исключение с помощью оператора throw*/
-        } catch (final
-        IOException exception) {
+        } catch (final IOException exception) {
             throw new TransportWriterException("Ошибка записи файла", exception);
         }
     }

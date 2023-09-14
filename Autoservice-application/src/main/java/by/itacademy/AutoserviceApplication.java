@@ -27,7 +27,7 @@ public class AutoserviceApplication {
 
         System.out.println("Старт программы автосервис!");
 
-        /*Обороачиваем логику программы в блок try-catch т.к. в процессе работы могут возникать ошибки*/
+        /*Оборачиваем логику программы в блок try-catch т.к. в процессе работы могут возникать ошибки*/
         try {
             /*Создаем объект класса TransportParser; final - т.к. его ссылка не должна меняться*/
             final TransportParser parser = new TransportJsonParser();
