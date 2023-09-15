@@ -2,6 +2,7 @@ package by.itacademy.validator.impl;
 
 import by.itacademy.transport.Transport;
 import by.itacademy.transport.TransportType;
+import by.itacademy.validator.FieldValidatorException;
 import by.itacademy.validator.Validator;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,7 @@ class TransportValidatorTest {
 
     /*Тесты выполнения метода transportValidator класса TransportValidator*/
     @Test
-    void transportValidator_happyPath() {
+    void transportValidator_happyPath() throws FieldValidatorException {
         /*Создаем коллекцию List типизруемую классом Transport; final - т.к. ее ссылка не должна меняться*/
         final List<Transport> transportList = new ArrayList<>();
         /*Создаем коллекцию List для хранения валидного транспорта, типизруемую классом Transport; final - т.к. ее ссылка не должна меняться*/

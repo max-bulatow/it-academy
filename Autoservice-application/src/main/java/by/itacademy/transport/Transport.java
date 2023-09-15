@@ -1,6 +1,9 @@
 package by.itacademy.transport;
 
+import by.itacademy.annotations.Validation;
+
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public class Transport {
     /*Поле для хранения типа транспорта. private - т.к. должно быть доступно только внутри класса Transport
@@ -8,6 +11,7 @@ public class Transport {
     private final TransportType transportType;
     /*Поле для хранения модели транспорта. private - т.к. должно быть доступно только внутри класса Transport
     final - т.к. его ссылка не должна меняться*/
+    @Validation(pattern = "^[a-zA-Z]((\\s|-)?[a-zA-Z0-9])*$")
     private final String model;
 
     //Конструктор класса Transport. public - т.к. должен быть доступен другим классам в других пакетах
