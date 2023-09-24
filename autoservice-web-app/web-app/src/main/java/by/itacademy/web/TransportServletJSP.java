@@ -1,8 +1,6 @@
 package by.itacademy.web;
 
 import by.itacademy.model.Transport;
-import by.itacademy.web.decoder.Decoder;
-import by.itacademy.web.decoder.impl.InputStreamDecoder;
 import it.academy.core.parser.TransportParser;
 import it.academy.core.parser.TransportParserException;
 import it.academy.core.parser.impl.TransportJsonParser;
@@ -30,10 +28,10 @@ public class TransportServletJSP extends HttpServlet {
     @Override
     protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         final TransportParser parser = new TransportJsonParser();
-        final Decoder decoder = new InputStreamDecoder(request);
-        final TransportReader reader = new TransportJsonReader(decoder.getDecodedStream(), parser);
+        final String content = request.getParameter("jsonContent");
+        final TransportReader reader = new TransportJsonReader(content, parser);
         final Validator validator = new TransportValidator();
-        TransportContainer transportContainer;
+        final TransportContainer transportContainer;
 
         response.setContentType("text/html");
         response.setCharacterEncoding(DEFAULT_CHARSET.name());
@@ -52,9 +50,12 @@ public class TransportServletJSP extends HttpServlet {
             throw new IOException("Введено неправильное значение сортировки", exception);
         }
 
-        request.setAttribute("validTransport", transportContainer.getValidTransport());
-        request.setAttribute("invalidTransport", transportContainer.getInvalidTransport());
+        final var validTransportList = transportContainer.getValidTransport();
+        final var invalidTransportList = transportContainer.getInvalidTransport();
 
-        request.getRequestDispatcher("/table.jsp").forward(request, response);
+        request.setAttribute("validTransport", validTransportList);
+        request.setAttribute("invalidTransport", invalidTransportList);
+
+        getServletContext().getRequestDispatcher("/table.jsp").forward(request, response);
     }
 }

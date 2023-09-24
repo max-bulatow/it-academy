@@ -4,5 +4,5 @@ import it.academy.core.transport.TransportContainer;
 
 
 public interface SortingReader {
-    TransportContainer readSorting(String step, TransportContainer transportContainer) throws SorterReaderException;
+    TransportContainer readSorting(String sortingContent, TransportContainer transportContainer) throws SorterReaderException;
 }

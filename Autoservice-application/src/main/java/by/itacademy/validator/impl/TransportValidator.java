@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-public class TransportValidator implements Validator, FieldValidator {
+public class TransportValidator implements Validator {
 
     /*Поле типа String, которое будет использоваться в качестве ключа для Map
     public - должно быть доступно другим классам в других пакетах; static - константа должна быть общая для всего класса
@@ -70,11 +70,11 @@ public class TransportValidator implements Validator, FieldValidator {
     }
 
     /*Реализуем метод validate интерфейса FieldValidator*/
-    @Override
-    public boolean validate(final Field field, final Transport transport) throws FieldValidatorException {
+    //@Override
+    private boolean validate(final Field field, final Transport transport) throws FieldValidatorException {
         /*В цикле for-each пробегаемся по всем аннотациям поля; final - т.к. ссылка итерационной переменной не должна меняться*/
         for (final Annotation annotation : field.getDeclaredAnnotations()) {
-            /*Проверяем что полученная аннтауия принадлежит созданной нами аннотации Validation*/
+            /*Проверяем что полученная аннотация принадлежит созданной нами аннотации Validation*/
             if (!(annotation instanceof Validation validation)) {
                 continue;
             }
@@ -84,7 +84,7 @@ public class TransportValidator implements Validator, FieldValidator {
                 continue;
             }
 
-            /*Оборачиваем нашу логику в блок try-catch т.к. в процеесе работы могут вызываться исключения*/
+            /*Оборачиваем нашу логику в блок try-catch т.к. в процессе работы могут вызываться исключения*/
             try {
                 /*Создаем переменную типа String в которой будем хранить значение поля приведенное к типу String
                 final - т.к. ее ссылка не должна меняться*/

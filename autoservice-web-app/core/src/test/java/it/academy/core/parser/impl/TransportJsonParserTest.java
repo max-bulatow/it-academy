@@ -10,15 +10,15 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TransportJsonParserTest {
+public class TransportJsonParserTest {
+
+    public static final String content = "[  {    \"type\": \"motorcycle\",    \"model\": \"Ninja ZX-14\"  },  {    \"type\": \"automobile\",    \"model\": \"Audi Q7\"  }  ]";
 
     @Test
     void testParse_happyPath() throws TransportParserException {
         final List<Transport> transportList = new ArrayList<>();
         transportList.add(new Transport(TransportType.MOTORCYCLE, "Ninja ZX-14"));
         transportList.add(new Transport(TransportType.AUTOMOBILE, "Audi Q7"));
-
-        final String content = "[  {    \"type\": \"motorcycle\",    \"model\": \"Ninja ZX-14\"  },  {    \"type\": \"automobile\",    \"model\": \"Audi Q7\"  }  ]";
 
         final TransportJsonParser parser = new TransportJsonParser();
 

@@ -2,7 +2,6 @@ package it.academy.core.parser.impl;
 
 import by.itacademy.model.Transport;
 import by.itacademy.model.TransportType;
-
 import it.academy.core.parser.TransportParser;
 import it.academy.core.parser.TransportParserException;
 import org.json.JSONArray;
