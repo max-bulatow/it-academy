@@ -50,8 +50,8 @@ public class TransportServletJSP extends HttpServlet {
             throw new IOException("Введено неправильное значение сортировки", exception);
         }
 
-        final var validTransportList = transportContainer.getValidTransport();
-        final var invalidTransportList = transportContainer.getInvalidTransport();
+        final List<Transport> validTransportList = transportContainer.getValidTransport();
+        final List<Transport> invalidTransportList = transportContainer.getInvalidTransport();
 
         request.setAttribute("validTransport", validTransportList);
         request.setAttribute("invalidTransport", invalidTransportList);
