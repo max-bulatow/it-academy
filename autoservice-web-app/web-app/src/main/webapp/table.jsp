@@ -13,9 +13,9 @@
                 </tr>
                    <c:forEach var = "transport" items = "${validTransport}">
                         <tr>
-                            <td>${transport.getTransportType()}</td>
-                            <td>${transport.getModel()}</td>
-                            <td>${transport.getPrice()}</td>
+                            <td>${transport.transportType}</td>
+                            <td>${transport.model}</td>
+                            <td>${transport.transportType.getPrice()}</td>
                         </tr>
                    </c:forEach>
             </table>
@@ -28,8 +28,8 @@
                 </tr>
                    <c:forEach var = "transport" items = "${invalidTransport}">
                         <tr>
-                            <td>${transport.getTransportType()}</td>
-                            <td>${transport.getModel()}</td>
+                            <td>${transport.transportType}</td>
+                            <td>${transport.model}</td>
                         </tr>
                    </c:forEach>
             </table>
