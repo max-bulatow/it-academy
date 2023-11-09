@@ -1,32 +1,21 @@
 package by.itacademy.dao.impl;
 
-import by.itacademy.dao.Dao;
-import by.itacademy.dao.DaoException;
 import by.itacademy.dao.GenericDao;
 import by.itacademy.subject.Subject;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
-public class SubjectDao extends GenericDao<Subject> implements Dao<Subject> {
+public class SubjectDao extends GenericDao<Subject> {
 
-    public SubjectDao() {
-        setEntityClass(Subject.class);
+    private final SessionFactory sessionFactory;
+
+    public SubjectDao(SessionFactory sessionFactory) {
+        super(Subject.class);
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
-    public Subject read(Integer id) throws DaoException {
-        Session session = sessionBeginTransaction();
-        Subject subjectFind = session.find(Subject.class, id);
-        session.getTransaction().commit();
-
-        return subjectFind;
+    protected Session getSession() {
+        return sessionFactory.openSession();
     }
-
-    @Override
-    public void delete(Integer id) throws DaoException {
-        Session session = sessionBeginTransaction();
-        Subject subjectDelete = session.find(Subject.class, id);
-        session.remove(subjectDelete);
-        session.getTransaction().commit();
-    }
-
 }

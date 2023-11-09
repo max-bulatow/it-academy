@@ -5,7 +5,7 @@ public interface Dao<T> {
 
     T read(Integer id) throws DaoException;
 
-    T update(T entity) throws DaoException;
+    void update(T entity) throws DaoException;
 
     void delete(Integer id) throws DaoException;
 

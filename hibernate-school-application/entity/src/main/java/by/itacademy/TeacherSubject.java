@@ -8,10 +8,22 @@ import jakarta.persistence.*;
 @Table(name = "teacher_subject")
 public class TeacherSubject extends BaseEntity{
 
-    @JoinColumn(name = "teacher_id")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "teacher_id",
+            referencedColumnName = "id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk__teacher_subject__teacher__id")
+    )
     private Teacher teacher;
 
-    @JoinColumn(name = "subject_id")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "subject_id",
+            referencedColumnName = "id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk__teacher_subject__subject__id")
+    )
     private Subject subject;
 
     public Teacher getTeacher() {

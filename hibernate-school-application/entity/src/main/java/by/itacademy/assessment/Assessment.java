@@ -1,6 +1,7 @@
 package by.itacademy.assessment;
 
 import by.itacademy.BaseEntity;
+import by.itacademy.lesson.Lesson;
 import by.itacademy.student.Student;
 import by.itacademy.subject.Subject;
 import by.itacademy.teacher.Teacher;
@@ -13,18 +14,42 @@ import java.time.OffsetDateTime;
 public class Assessment extends BaseEntity {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "student_id")
+    @JoinColumn(
+            name = "student_id",
+            referencedColumnName = "id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk__assessment__student__id")
+    )
     private Student student;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "teacher_id")
+    @JoinColumn(
+            name = "teacher_id",
+            referencedColumnName = "id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk__assessment__teacher__id")
+    )
     private Teacher teacher;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "subject_id")
+    @JoinColumn(
+            name = "subject_id",
+            referencedColumnName = "id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk__assessment__subject__id")
+    )
     private Subject subject;
 
-    @Column(name = "assessment")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "lesson_id",
+            referencedColumnName = "id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk__assessment__lesson__id")
+    )
+    private Lesson lesson;
+
+    @Column(name = "assessment", length = 2)
     private Integer assessment;
 
     @Column(name = "created", nullable = false)

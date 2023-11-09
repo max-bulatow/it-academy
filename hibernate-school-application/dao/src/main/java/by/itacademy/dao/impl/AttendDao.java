@@ -1,16 +1,16 @@
 package by.itacademy.dao.impl;
 
+import by.itacademy.attend.Attend;
 import by.itacademy.dao.GenericDao;
-import by.itacademy.teacher.Teacher;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public class TeacherDao extends GenericDao<Teacher> {
+public class AttendDao extends GenericDao<Attend> {
 
     private final SessionFactory sessionFactory;
 
-    public TeacherDao(SessionFactory sessionFactory) {
-        super(Teacher.class);
+    public AttendDao(SessionFactory sessionFactory) {
+        super(Attend.class);
         this.sessionFactory = sessionFactory;
     }
 

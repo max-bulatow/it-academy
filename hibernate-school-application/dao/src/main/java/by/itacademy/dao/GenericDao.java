@@ -6,45 +6,58 @@ import org.postgresql.shaded.com.ongres.scram.common.util.Preconditions;
 
 public abstract class GenericDao<T> implements Dao<T> {
 
-    private Class<T> entityClass;
+    private final Class<T> type;
 
-    public final void setEntityClass(final Class<T> entityClassToSet) {
-        entityClass = Preconditions.checkNotNull(entityClassToSet, "entityClassToSet");
+    public GenericDao(Class<T> type) {
+        this.type = type;
     }
 
     @Override
     public T create(T entity) throws DaoException {
-        Session session = sessionBeginTransaction();
+        Session session = getSession();
+        session.beginTransaction();
+
         session.merge(entity);
         session.getTransaction().commit();
+
+        session.close();
 
         return entity;
     }
 
     @Override
     public T read(Integer id) throws DaoException {
+        Session session = getSession();
+        session.beginTransaction();
+        T entity = session.find(type, id);
 
-        return (T) entityClass;
+        session.close();
+
+        return entity;
     }
 
     @Override
-    public T update(T entity) throws DaoException {
-        Session session = sessionBeginTransaction();
-        T entityUpdate = session.merge(entity);
+    public void update(T entity) throws DaoException {
+        Session session = getSession();
+        session.beginTransaction();
+
+        session.merge(entity);
         session.getTransaction().commit();
 
-        return entityUpdate;
+        session.close();
     }
 
     @Override
     public void delete(Integer id) throws DaoException {
-
-    }
-
-    protected static Session sessionBeginTransaction() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = getSession();
         session.beginTransaction();
 
-        return session;
+        T entity = session.find(type, id);
+        session.remove(entity);
+        session.getTransaction().commit();
+
+        session.close();
     }
+
+    protected abstract Session getSession();
 }
