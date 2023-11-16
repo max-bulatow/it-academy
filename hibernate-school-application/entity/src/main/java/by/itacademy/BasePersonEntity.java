@@ -28,4 +28,12 @@ public class BasePersonEntity extends BaseEntity {
         this.lastName = lastName;
     }
 
+
+    @Override
+    public String toString() {
+        return "BasePersonEntity{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }

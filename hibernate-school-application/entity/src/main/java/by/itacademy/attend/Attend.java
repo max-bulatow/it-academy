@@ -18,7 +18,7 @@ public class Attend extends BaseEntity {
     )
     private Lesson lesson;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(
             name = "student_id",
             referencedColumnName = "id",
@@ -52,5 +52,13 @@ public class Attend extends BaseEntity {
 
     public void setVisited(final boolean visited) {
         this.visited = visited;
+    }
+
+    @Override
+    public String toString() {
+        return "Attend{" +
+                "student = " + student + "," + '\n' +
+                "visited = " + visited +
+                '}';
     }
 }

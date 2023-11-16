@@ -1,79 +1,62 @@
 package by.itacademy.grouproom;
 
 import by.itacademy.BaseEntity;
-import by.itacademy.group.SchoolGroup;
 import by.itacademy.lesson.Lesson;
 import by.itacademy.school.School;
-import by.itacademy.subject.Subject;
+import by.itacademy.studentGroup.StudentGroup;
 import by.itacademy.teacher.Teacher;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
-@Table(name = "groupRoom")
+@Table(name = "group_room")
 public class GroupRoom extends BaseEntity {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "schoolGroup_id",
+            name = "student_group_id",
             referencedColumnName = "id",
             nullable = false,
-            foreignKey = @ForeignKey(name = "fk__groupRoom__schoolGroup__id")
+            foreignKey = @ForeignKey(name = "fk__group_room__student_group__id")
     )
-    private SchoolGroup schoolGroup;
+    private StudentGroup studentGroup;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "teacher_id",
+            name = "room_owner_id",
             referencedColumnName = "id",
             nullable = false,
-            foreignKey = @ForeignKey(name = "fk__groupRoom__teacher__id")
+            foreignKey = @ForeignKey(name = "fk__group_room__teacher__id")
     )
-    private Teacher teacher;
-
-    @OneToMany(mappedBy = "groupRoom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Lesson> lesson;
+    private Teacher roomOwner;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(
             name = "school_id",
             referencedColumnName = "id",
             nullable = false,
-            foreignKey = @ForeignKey(name = "fk__groupRoom__school__id")
+            foreignKey = @ForeignKey(name = "fk__group_room__school__id")
     )
     private School school;
 
-    public SchoolGroup getGroup() {
-        return schoolGroup;
+    @OneToMany(mappedBy = "groupRoom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Lesson> lessons;
+
+    public StudentGroup getStudentGroup() {
+        return studentGroup;
     }
 
-    public void setGroup(final SchoolGroup schoolGroup) {
-        this.schoolGroup = schoolGroup;
+    public void setStudentGroup(final StudentGroup studentGroup) {
+        this.studentGroup = studentGroup;
     }
 
-    public Teacher getTeacher() {
-        return teacher;
+    public Teacher getRoomOwner() {
+        return roomOwner;
     }
 
-    public void setTeacher(final Teacher teacher) {
-        this.teacher = teacher;
-    }
-
-    public SchoolGroup getSchoolGroup() {
-        return schoolGroup;
-    }
-
-    public void setSchoolGroup(final SchoolGroup schoolGroup) {
-        this.schoolGroup = schoolGroup;
-    }
-
-    public List<Lesson> getLesson() {
-        return lesson;
-    }
-
-    public void setLesson(final List<Lesson> lesson) {
-        this.lesson = lesson;
+    public void setRoomOwner(final Teacher roomOwner) {
+        this.roomOwner = roomOwner;
     }
 
     public School getSchool() {
@@ -82,5 +65,20 @@ public class GroupRoom extends BaseEntity {
 
     public void setSchool(final School school) {
         this.school = school;
+    }
+
+    public List<Lesson> getLesson() {
+        return lessons;
+    }
+
+    public void setLesson(final List<Lesson> lessons) {
+        this.lessons = lessons;
+    }
+
+
+    @Override
+    public String toString() {
+        return "GroupRoom{" +
+                '}';
     }
 }

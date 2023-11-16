@@ -2,9 +2,10 @@ package by.itacademy.lesson;
 
 import by.itacademy.BaseEntity;
 import by.itacademy.assessment.Assessment;
-import by.itacademy.group.SchoolGroup;
+import by.itacademy.attend.Attend;
 import by.itacademy.grouproom.GroupRoom;
 import by.itacademy.schedule.Schedule;
+import by.itacademy.studentGroup.StudentGroup;
 import by.itacademy.subject.Subject;
 import by.itacademy.teacher.Teacher;
 import jakarta.persistence.*;
@@ -26,22 +27,28 @@ public class Lesson extends BaseEntity {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "schoolGroup_id",
+            name = "student_group_id",
             referencedColumnName = "id",
             nullable = false,
-            foreignKey = @ForeignKey(name = "fk__lesson__schoolGroup__id")
+            foreignKey = @ForeignKey(name = "fk__lesson__student_group__id")
     )
-    private SchoolGroup schoolGroup;
-
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Subject> subjects;
+    private StudentGroup studentGroup;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "groupRoom_id",
+            name = "subject_id",
             referencedColumnName = "id",
             nullable = false,
-            foreignKey = @ForeignKey(name = "fk__lesson__groupRoom__id")
+            foreignKey = @ForeignKey(name = "fk__lesson__subject__id")
+    )
+    private Subject subject;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "group_room_id",
+            referencedColumnName = "id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk__lesson__group_room__id")
     )
     private GroupRoom groupRoom;
 
@@ -54,8 +61,11 @@ public class Lesson extends BaseEntity {
     )
     private Schedule schedule;
 
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Assessment> assessments;
+
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Attend> attends;
 
     public Teacher getTeacher() {
         return teacher;
@@ -65,20 +75,20 @@ public class Lesson extends BaseEntity {
         this.teacher = teacher;
     }
 
-    public SchoolGroup getGroup() {
-        return schoolGroup;
+    public StudentGroup getStudentGroup() {
+        return studentGroup;
     }
 
-    public void setGroup(final SchoolGroup schoolGroup) {
-        this.schoolGroup = schoolGroup;
+    public void setStudentGroup(final StudentGroup studentGroup) {
+        this.studentGroup = studentGroup;
     }
 
-    public List<Subject> getSubjects() {
-        return subjects;
+    public Subject getSubject() {
+        return subject;
     }
 
-    public void setSubjects(final List<Subject> subjects) {
-        this.subjects = subjects;
+    public void setSubject(final Subject subject) {
+        this.subject = subject;
     }
 
     public GroupRoom getGroupRoom() {
@@ -103,5 +113,21 @@ public class Lesson extends BaseEntity {
 
     public void setAssessments(final List<Assessment> assessments) {
         this.assessments = assessments;
+    }
+
+    public List<Attend> getAttends() {
+        return attends;
+    }
+
+    public void setAttends(final List<Attend> attends) {
+        this.attends = attends;
+    }
+
+    @Override
+    public String toString() {
+        return "Lesson{" +
+                "assessments = " + assessments.stream().toList() + "," + '\n' +
+                "attends = " + attends.stream().toList() +
+                '}';
     }
 }

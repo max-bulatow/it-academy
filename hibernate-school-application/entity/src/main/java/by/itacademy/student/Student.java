@@ -1,12 +1,11 @@
 package by.itacademy.student;
 
-import by.itacademy.assessment.Assessment;
 import by.itacademy.BasePersonEntity;
+import by.itacademy.assessment.Assessment;
 import by.itacademy.attend.Attend;
-import by.itacademy.group.SchoolGroup;
-import by.itacademy.lesson.Lesson;
 import by.itacademy.parent.Parent;
 import by.itacademy.school.School;
+import by.itacademy.studentGroup.StudentGroup;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -15,32 +14,27 @@ import java.util.List;
 @Table(name = "student")
 public class Student extends BasePersonEntity {
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "parent_id",
-            referencedColumnName = "id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "fk__student__parent__id")
-    )
-    private Parent parent;
+    @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<School> schools;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "schoolGroup_id",
-            referencedColumnName = "id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "fk__student__schoolGroup__id")
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "student_parent",
+            joinColumns = @JoinColumn(
+                    name = "student_id",
+                    referencedColumnName = "id",
+                    foreignKey = @ForeignKey(name = "fk__student_parent__student__id")
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "parent_id",
+                    referencedColumnName = "id",
+                    foreignKey = @ForeignKey(name = "fk__student_parent__parent__id")
+            )
     )
-    private SchoolGroup schoolGroup;
+    private List<Parent> parents;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "lesson_id",
-            referencedColumnName = "id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "fk__student__lesson__id")
-    )
-    private Lesson lesson;
+    @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<StudentGroup> studentGroups;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Assessment> assessments;
@@ -48,32 +42,36 @@ public class Student extends BasePersonEntity {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Attend> attends;
 
-    @ManyToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<School> schools;
-
-
-    public Parent getParent() {
-        return parent;
+    public List<School> getSchools() {
+        return schools;
     }
 
-    public void setParent(final Parent parent) {
-        this.parent = parent;
+    public void setSchools(final List<School> schools) {
+        this.schools = schools;
     }
 
-    public SchoolGroup getGroup() {
-        return schoolGroup;
+    public List<Parent> getParents() {
+        return parents;
     }
 
-    public void setGroup(final SchoolGroup schoolGroup) {
-        this.schoolGroup = schoolGroup;
+    public void setParents(final List<Parent> parents) {
+        this.parents = parents;
     }
 
-    public Lesson getLesson() {
-        return lesson;
+    public List<StudentGroup> getStudentGroups() {
+        return studentGroups;
     }
 
-    public void setLesson(final Lesson lesson) {
-        this.lesson = lesson;
+    public void setStudentGroups(final List<StudentGroup> studentGroups) {
+        this.studentGroups = studentGroups;
+    }
+
+    public List<Assessment> getAssessments() {
+        return assessments;
+    }
+
+    public void setAssessments(final List<Assessment> assessments) {
+        this.assessments = assessments;
     }
 
     public List<Attend> getAttends() {
@@ -84,44 +82,4 @@ public class Student extends BasePersonEntity {
         this.attends = attends;
     }
 
-    public List<School> getSchools() {
-        return schools;
-    }
-
-    public void setSchools(final List<School> schools) {
-        this.schools = schools;
-    }
-
-    public List<Assessment> getAssessments() {
-        return assessments;
-    }
-
-    public void setAssessments(final List<Assessment> assessments) {
-        if (assessments != null && !assessments.isEmpty()) {
-            assessments.forEach(assessment -> assessment.setStudent(this));
-        }
-        this.assessments = assessments;
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        return super.equals(obj);
-    }
-
-    @Override
-    public String toString() {
-        return "Student{" +
-                "parent=" + parent +
-                ", schoolGroup=" + schoolGroup +
-                ", lesson=" + lesson +
-                ", assessments=" + assessments +
-                ", attends=" + attends +
-                ", schools=" + schools +
-                '}';
-    }
 }

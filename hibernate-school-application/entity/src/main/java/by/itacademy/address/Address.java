@@ -4,6 +4,7 @@ import by.itacademy.BaseEntity;
 import by.itacademy.school.School;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,13 +13,15 @@ public class Address extends BaseEntity {
 
     @Column(name = "city", length = 30, nullable = false)
     private String city;
+
     @Column(name = "street", length = 50, nullable = false)
     private String street;
+
     @Column(name = "building_number", length = 10, nullable = false)
     private String buildingNumber;
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<School> schools;
+    private List<School> schools = new ArrayList<>();
 
     public String getCity() {
         return city;
@@ -55,10 +58,9 @@ public class Address extends BaseEntity {
     @Override
     public String toString() {
         return "Address{" +
-                "city='" + city + '\'' +
-                ", street='" + street + '\'' +
-                ", buildingNumber='" + buildingNumber + '\'' +
-                ", schools=" + schools +
+                "city = '" + city + '\'' +
+                ", street = '" + street + '\'' +
+                ", buildingNumber = '" + buildingNumber + '\'' +
                 '}';
     }
 }

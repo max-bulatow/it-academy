@@ -1,12 +1,12 @@
 package by.itacademy.dao;
 
 public interface Dao<T> {
-    T create(T entity) throws DaoException;
 
-    T read(Integer id) throws DaoException;
+    void create(T entity);
 
-    void update(T entity) throws DaoException;
+    T read(Class<T> clazz, Integer id);
 
-    void delete(Integer id) throws DaoException;
+    void update(T entity);
 
+    void delete(Integer id);
 }

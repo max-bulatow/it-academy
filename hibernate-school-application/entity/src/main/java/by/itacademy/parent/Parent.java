@@ -10,7 +10,7 @@ import java.util.List;
 @Table(name = "parent")
 public class Parent extends BasePersonEntity {
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "parents", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Student> students;
 
     public List<Student> getStudents() {

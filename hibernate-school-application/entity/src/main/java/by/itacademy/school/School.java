@@ -2,10 +2,10 @@ package by.itacademy.school;
 
 import by.itacademy.BaseEntity;
 import by.itacademy.address.Address;
-import by.itacademy.group.SchoolGroup;
 import by.itacademy.grouproom.GroupRoom;
 import by.itacademy.schedule.Schedule;
 import by.itacademy.student.Student;
+import by.itacademy.studentGroup.StudentGroup;
 import by.itacademy.subject.Subject;
 import by.itacademy.teacher.Teacher;
 import jakarta.persistence.*;
@@ -19,57 +19,71 @@ public class School extends BaseEntity {
     @Column(name = "name", length = 250, nullable = false)
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(
             name = "address_id",
             referencedColumnName = "id",
+            nullable = false,
             foreignKey = @ForeignKey(name = "fk__school__address__id")
     )
     private Address address;
 
-    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<SchoolGroup> schoolGroups;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "school_subject",
+            joinColumns = @JoinColumn(
+                    name = "school_id",
+                    referencedColumnName = "id",
+                    foreignKey = @ForeignKey(name = "fk__school_subject__school__id")
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "subject_id",
+                    referencedColumnName = "id",
+                    foreignKey = @ForeignKey(name = "fk__school_subject__subject__id")
+            )
+    )
+    private List<Subject> subjects;
 
-    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Schedule> schedules;
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "school_teacher",
             joinColumns = @JoinColumn(
+                    name = "school_id",
+                    referencedColumnName = "id",
+                    foreignKey = @ForeignKey(name = "fk__school_teacher__school__id")
+            ),
+            inverseJoinColumns = @JoinColumn(
                     name = "teacher_id",
                     referencedColumnName = "id",
                     foreignKey = @ForeignKey(name = "fk__school_teacher__teacher__id")
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "school_id",
-                    referencedColumnName = "id",
-                    foreignKey = @ForeignKey(name = "fk__school_teacher__school__id")
             )
     )
-    private List<Teacher> teacher;
+    private List<Teacher> teachers;
 
-    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<GroupRoom> groupRooms;
-
-    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Subject> subjects;
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "school_student",
             joinColumns = @JoinColumn(
+                    name = "school_id",
+                    referencedColumnName = "id",
+                    foreignKey = @ForeignKey(name = "fk__school_student__school__id")
+            ),
+            inverseJoinColumns = @JoinColumn(
                     name = "student_id",
                     referencedColumnName = "id",
                     foreignKey = @ForeignKey(name = "fk__school_student__student__id")
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "school_id",
-                    referencedColumnName = "id",
-                    foreignKey = @ForeignKey(name = "fk__school_teacher__school__id")
             )
     )
-    private List<Student> student;
+    private List<Student> students;
+
+    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<StudentGroup> studentGroups;
+
+    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Schedule> schedules;
+
+    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<GroupRoom> groupRooms;
 
     public String getName() {
         return name;
@@ -87,12 +101,36 @@ public class School extends BaseEntity {
         this.address = address;
     }
 
-    public List<SchoolGroup> getGroups() {
-        return schoolGroups;
+    public List<Subject> getSubjects() {
+        return subjects;
     }
 
-    public void setGroups(final List<SchoolGroup> schoolGroups) {
-        this.schoolGroups = schoolGroups;
+    public void setSubjects(final List<Subject> subjects) {
+        this.subjects = subjects;
+    }
+
+    public List<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(final List<Teacher> teachers) {
+        this.teachers = teachers;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(final List<Student> students) {
+        this.students = students;
+    }
+
+    public List<StudentGroup> getStudentGroups() {
+        return studentGroups;
+    }
+
+    public void setStudentGroups(final List<StudentGroup> studentGroups) {
+        this.studentGroups = studentGroups;
     }
 
     public List<Schedule> getSchedules() {
@@ -103,14 +141,6 @@ public class School extends BaseEntity {
         this.schedules = schedules;
     }
 
-    public List<Teacher> getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(final List<Teacher> teacher) {
-        this.teacher = teacher;
-    }
-
     public List<GroupRoom> getGroupRooms() {
         return groupRooms;
     }
@@ -119,33 +149,17 @@ public class School extends BaseEntity {
         this.groupRooms = groupRooms;
     }
 
-    public List<Subject> getSubjects() {
-        return subjects;
-    }
-
-    public void setSubjects(final List<Subject> subjects) {
-        this.subjects = subjects;
-    }
-
-    public List<Student> getStudent() {
-        return student;
-    }
-
-    public void setStudent(final List<Student> student) {
-        this.student = student;
-    }
-
     @Override
     public String toString() {
         return "School{" +
-                "name='" + name + '\'' +
-                ", address=" + address +
-                ", schoolGroups=" + schoolGroups +
-                ", schedules=" + schedules +
-                ", teacher=" + teacher +
-                ", groupRooms=" + groupRooms +
-                ", subjects=" + subjects +
-                ", student=" + student +
+                "name = '" + name + '\'' + "," + '\n' +
+                "address = " + address + "," + '\n' +
+                "subjects = " + subjects.stream().toList() + "," + '\n' +
+                "teachers = " + teachers.stream().toList() + "," + '\n' +
+                "student = " + students.stream().toList() + "," + '\n' +
+                "student group = " + studentGroups.stream().toList() + "," + '\n' +
+                "schedule = " + schedules.stream().toList() + "," + '\n' +
+                "group room = " + groupRooms.stream().toList() +
                 '}';
     }
 }

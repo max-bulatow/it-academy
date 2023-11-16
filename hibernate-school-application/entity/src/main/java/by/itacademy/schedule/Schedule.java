@@ -1,7 +1,6 @@
 package by.itacademy.schedule;
 
 import by.itacademy.BaseEntity;
-import by.itacademy.group.SchoolGroup;
 import by.itacademy.lesson.Lesson;
 import by.itacademy.school.School;
 import jakarta.persistence.*;
@@ -12,17 +11,12 @@ import java.util.List;
 @Entity
 @Table(name = "schedule")
 public class Schedule extends BaseEntity {
-    @Column(name = "startDate", nullable = false)
+
+    @Column(name = "start_date", nullable = false)
     private OffsetDateTime startDate;
 
-    @Column(name = "endDate", nullable = false)
+    @Column(name = "end_date", nullable = false)
     private OffsetDateTime endDate;
-
-    @OneToOne(mappedBy = "schedule")
-    private SchoolGroup schoolGroup;
-
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Lesson> lessons;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(
@@ -32,6 +26,9 @@ public class Schedule extends BaseEntity {
             foreignKey = @ForeignKey(name = "fk__schedule__school__id")
     )
     private School school;
+
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Lesson> lessons;
 
     public OffsetDateTime getStartDate() {
         return startDate;
@@ -49,12 +46,12 @@ public class Schedule extends BaseEntity {
         this.endDate = endDate;
     }
 
-    public SchoolGroup getGroup() {
-        return schoolGroup;
+    public School getSchool() {
+        return school;
     }
 
-    public void setGroup(final SchoolGroup schoolGroup) {
-        this.schoolGroup = schoolGroup;
+    public void setSchool(final School school) {
+        this.school = school;
     }
 
     public List<Lesson> getLessons() {
@@ -65,11 +62,12 @@ public class Schedule extends BaseEntity {
         this.lessons = lessons;
     }
 
-    public School getSchool() {
-        return school;
-    }
 
-    public void setSchool(final School school) {
-        this.school = school;
+    @Override
+    public String toString() {
+        return "Schedule{" +
+                "startDate=" + startDate +
+                ", endDate=" + endDate +
+                '}';
     }
 }

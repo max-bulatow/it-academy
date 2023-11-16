@@ -1,12 +1,9 @@
 package by.itacademy.subject;
 
 import by.itacademy.BaseEntity;
-import by.itacademy.assessment.Assessment;
-import by.itacademy.group.SchoolGroup;
-import by.itacademy.grouproom.GroupRoom;
 import by.itacademy.lesson.Lesson;
 import by.itacademy.school.School;
-import by.itacademy.teacher.Teacher;
+import by.itacademy.studentGroup.StudentGroup;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -18,70 +15,14 @@ public class Subject extends BaseEntity {
     @Column(name = "name", length = 50, nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "subject")
-    private List<Teacher> teachers;
+    @ManyToMany(mappedBy = "subjects", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<School> schools;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "group_id",
-            referencedColumnName = "id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "fk__subject__group_id")
-    )
-    private SchoolGroup schoolGroup;
+    @ManyToMany(mappedBy = "subjects", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<StudentGroup> studentGroups;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "lesson_id",
-            referencedColumnName = "id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "fk__subject__lesson_id")
-    )
-    private Lesson lesson;
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "school_id",
-            referencedColumnName = "id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "fk__subject__school_id")
-    )
-    private School school;
-
-    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Assessment> assessments;
-
-    public List<Teacher> getTeachers() {
-        return teachers;
-    }
-
-    public void setTeachers(final List<Teacher> teachers) {
-        this.teachers = teachers;
-    }
-
-    public SchoolGroup getGroup() {
-        return schoolGroup;
-    }
-
-    public void setGroup(final SchoolGroup schoolGroup) {
-        this.schoolGroup = schoolGroup;
-    }
-
-    public Lesson getLesson() {
-        return lesson;
-    }
-
-    public void setLesson(final Lesson lesson) {
-        this.lesson = lesson;
-    }
-
-    public School getSchool() {
-        return school;
-    }
-
-    public void setSchool(final School school) {
-        this.school = school;
-    }
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Lesson> lessons;
 
     public String getName() {
         return name;
@@ -91,23 +32,34 @@ public class Subject extends BaseEntity {
         this.name = name;
     }
 
-    public List<Assessment> getAssessments() {
-        return assessments;
+    public List<School> getSchools() {
+        return schools;
     }
 
-    public void setAssessments(final List<Assessment> assessments) {
-        if (assessments != null && !assessments.isEmpty()) {
-            assessments.forEach(assessment -> assessment.setSubject(this));
-        }
-        this.assessments = assessments;
+    public void setSchools(final List<School> schools) {
+        this.schools = schools;
+    }
+
+    public List<StudentGroup> getStudentGroups() {
+        return studentGroups;
+    }
+
+    public void setStudentGroups(final List<StudentGroup> studentGroups) {
+        this.studentGroups = studentGroups;
+    }
+
+    public List<Lesson> getLessons() {
+        return lessons;
+    }
+
+    public void setLessons(final List<Lesson> lessons) {
+        this.lessons = lessons;
     }
 
     @Override
     public String toString() {
         return "Subject{" +
-                "Id = " + super.getId() +
-                ", name = " + name +
-                ", assessments = " + assessments +
+                "name = '" + name + '\'' +
                 '}';
     }
 }
