@@ -1,78 +1,76 @@
 package by.itacademy.dao;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public abstract class GenericDao<T> implements Dao<T> {
 
     private final Class<T> type;
 
-    public GenericDao(Class<T> type) {
+    private final BiFunction<String, Exception, DaoException> exceptionCreator;
+
+    private final SessionFactory sessionFactory;
+
+    public GenericDao(
+            Class<T> type,
+            BiFunction<String, Exception, DaoException> exceptionCreator,
+            SessionFactory sessionFactory
+    ) {
         this.type = type;
+        this.exceptionCreator = exceptionCreator;
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
-    public void create(T entity) {
-        Transaction transaction = null;
-        try (Session session = getSession()) {
-            transaction = session.beginTransaction();
-            session.merge(entity);
-            session.getTransaction().commit();
-        } catch (Exception ex) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            System.out.println("Can't create entity:" + entity + ex);
-        }
+    public void create(T entity) throws DaoException {
+        perform((session) -> session.merge(entity), "Can't create entity " + type);
     }
 
     @Override
-    public T read(Class<T> clazz, Integer id) {
-        Transaction transaction = null;
-        T entity = null;
-        try (Session session = getSession()) {
-            transaction = session.beginTransaction();
-            entity = session.find(clazz, id);
-            session.getTransaction().commit();
-        } catch (Exception ex) {
-            if (transaction != null) {
-                transaction.rollback();
-                System.out.println("Can't read entity: " + clazz + ex);
-            }
-        }
-        return entity;
+    public T read(Integer id) throws DaoException {
+        return perform((session) -> session.find(type, id), "Can't read entity " + type);
     }
 
     @Override
-    public void update(T entity) {
-        Transaction transaction = null;
-        try (Session session = getSession()) {
-            transaction = session.beginTransaction();
-            session.merge(entity);
-            session.getTransaction().commit();
-        } catch (Exception ex) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            System.out.println("Can't update entity: " + entity + ex);
-        }
+    public void update(T entity) throws DaoException {
+        perform((session) -> session.merge(entity), "Can't create entity " + type);
     }
 
     @Override
-    public void delete(Integer id) {
-        Transaction transaction = null;
-        try (Session session = getSession()) {
-            transaction = session.beginTransaction();
+    public void delete(Integer id) throws DaoException {
+        perform((session) -> {
             T entity = session.find(type, id);
             session.remove(entity);
-            session.getTransaction().commit();
-        } catch (Exception ex) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            System.out.println("can't delete entity with id: " + id + ex);
-        }
+            return entity;
+        }, "Can't delete entity " + type);
     }
 
-    protected abstract Session getSession();
+    protected Session getSession() {
+        return sessionFactory.openSession();
+    }
+
+    protected T perform(Function<Session, T> function, String errorMessage) throws DaoException {
+        Transaction transaction = null;
+        T result;
+        try (Session session = getSession()) {
+            transaction = session.beginTransaction();
+            result = function.apply(session);
+            session.getTransaction().commit();
+            return result;
+        } catch (Exception ex) {
+            try {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+            } catch (RuntimeException rex) {
+                throw exceptionCreator.apply("Failed to rollback for: " + type, rex);
+            }
+
+            throw exceptionCreator.apply(errorMessage, ex);
+        }
+    }
 }

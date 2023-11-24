@@ -1,21 +1,14 @@
 package by.itacademy.dao.impl;
 
 import by.itacademy.address.Address;
+import by.itacademy.dao.DaoException;
 import by.itacademy.dao.GenericDao;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 public class AddressDao extends GenericDao<Address> {
 
-    private final SessionFactory sessionFactory;
-
     public AddressDao(SessionFactory sessionFactory) {
-        super(Address.class);
-        this.sessionFactory = sessionFactory;
+        super(Address.class, DaoException.AddressDaoException::new, sessionFactory);
     }
 
-    @Override
-    protected Session getSession() {
-        return sessionFactory.openSession();
-    }
 }
