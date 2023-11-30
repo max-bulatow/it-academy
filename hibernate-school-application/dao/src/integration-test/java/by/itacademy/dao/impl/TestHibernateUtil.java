@@ -15,7 +15,7 @@ import by.itacademy.teacher.Teacher;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class BaseDaoIntegrationTest {
+public class TestHibernateUtil {
 
     protected static final SessionFactory SESSION_FACTORY = buildSessionFactory();
 

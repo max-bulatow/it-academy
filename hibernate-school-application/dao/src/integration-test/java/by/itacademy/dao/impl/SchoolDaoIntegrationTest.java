@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static by.itacademy.dao.impl.AddressDaoIntegrationTest.ADDRESS_DAO;
-import static by.itacademy.dao.impl.BaseDaoIntegrationTest.SESSION_FACTORY;
+import static by.itacademy.dao.impl.TestHibernateUtil.SESSION_FACTORY;
 
 public class SchoolDaoIntegrationTest {
 

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static by.itacademy.dao.impl.BaseDaoIntegrationTest.SESSION_FACTORY;
+import static by.itacademy.dao.impl.TestHibernateUtil.SESSION_FACTORY;
 import static by.itacademy.dao.impl.SchoolDaoIntegrationTest.SCHOOL_DAO;
 
 public class SubjectDaoIntegrationTest {
