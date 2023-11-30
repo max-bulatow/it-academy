@@ -15,7 +15,7 @@ public class Subject extends BaseEntity {
     @Column(name = "name", length = 50, nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "subjects", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "subjects", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<School> schools;
 
     @ManyToMany(mappedBy = "subjects", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

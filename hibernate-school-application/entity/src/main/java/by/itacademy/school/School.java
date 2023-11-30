@@ -19,7 +19,7 @@ public class School extends BaseEntity {
     @Column(name = "name", length = 250, nullable = false)
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinColumn(
             name = "address_id",
             referencedColumnName = "id",

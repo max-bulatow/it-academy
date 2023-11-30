@@ -159,7 +159,7 @@
                         <configuration>
                             <resources>
                                 <resource>
-                                    <directory>src/integration-test/resource</directory>
+                                    <directory>src/integration-test/resources</directory>
                                 </resource>
                             </resources>
                         </configuration>
