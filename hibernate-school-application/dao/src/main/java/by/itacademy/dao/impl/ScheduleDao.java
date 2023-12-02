@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 
 public class ScheduleDao extends GenericDao<Schedule> {
 
-    public ScheduleDao(SessionFactory sessionFactory) {
+    public ScheduleDao(final SessionFactory sessionFactory) {
         super(Schedule.class, DaoException.ScheduleDaoException::new, sessionFactory);
     }
 

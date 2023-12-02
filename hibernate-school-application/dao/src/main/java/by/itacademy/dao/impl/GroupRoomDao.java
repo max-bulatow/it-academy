@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 
 public class GroupRoomDao extends GenericDao<GroupRoom> {
 
-    public GroupRoomDao(SessionFactory sessionFactory) {
+    public GroupRoomDao(final SessionFactory sessionFactory) {
         super(GroupRoom.class, DaoException.GroupRoomDaoException::new, sessionFactory);
     }
 

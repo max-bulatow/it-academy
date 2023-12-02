@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 
 public class SubjectDao extends GenericDao<Subject> {
 
-    public SubjectDao(SessionFactory sessionFactory) {
+    public SubjectDao(final SessionFactory sessionFactory) {
         super(Subject.class, DaoException.SubjectDaoException::new, sessionFactory);
     }
 

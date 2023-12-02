@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 
 public class AddressDao extends GenericDao<Address> {
 
-    public AddressDao(SessionFactory sessionFactory) {
+    public AddressDao(final SessionFactory sessionFactory) {
         super(Address.class, DaoException.AddressDaoException::new, sessionFactory);
     }
 

@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 
 public class AttendDao extends GenericDao<Attend> {
 
-    public AttendDao(SessionFactory sessionFactory) {
+    public AttendDao(final SessionFactory sessionFactory) {
         super(Attend.class, DaoException.AttendDaoException::new, sessionFactory);
     }
 

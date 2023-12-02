@@ -16,9 +16,9 @@ public abstract class GenericDao<T> implements Dao<T> {
     private final SessionFactory sessionFactory;
 
     public GenericDao(
-            Class<T> type,
-            BiFunction<String, Exception, DaoException> exceptionCreator,
-            SessionFactory sessionFactory
+            final Class<T> type,
+            final BiFunction<String, Exception, DaoException> exceptionCreator,
+            final SessionFactory sessionFactory
     ) {
         this.type = type;
         this.exceptionCreator = exceptionCreator;
@@ -26,22 +26,22 @@ public abstract class GenericDao<T> implements Dao<T> {
     }
 
     @Override
-    public void create(T entity) throws DaoException {
+    public void create(final T entity) throws DaoException {
         perform((session) -> session.merge(entity), "Can't create entity " + type);
     }
 
     @Override
-    public T read(Integer id) throws DaoException {
+    public T read(final Integer id) throws DaoException {
         return perform((session) -> session.find(type, id), "Can't read entity " + type);
     }
 
     @Override
-    public void update(T entity) throws DaoException {
+    public void update(final T entity) throws DaoException {
         perform((session) -> session.merge(entity), "Can't create entity " + type);
     }
 
     @Override
-    public void delete(Integer id) throws DaoException {
+    public void delete(final Integer id) throws DaoException {
         perform((session) -> {
             T entity = session.find(type, id);
             session.remove(entity);
@@ -53,7 +53,7 @@ public abstract class GenericDao<T> implements Dao<T> {
         return sessionFactory.openSession();
     }
 
-    protected T perform(Function<Session, T> function, String errorMessage) throws DaoException {
+    protected T perform(final Function<Session, T> function, final String errorMessage) throws DaoException {
         Transaction transaction = null;
         T result;
         try (Session session = getSession()) {

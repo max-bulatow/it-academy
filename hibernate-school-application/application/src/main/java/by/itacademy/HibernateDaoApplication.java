@@ -3,10 +3,7 @@ package by.itacademy;
 import by.itacademy.address.Address;
 import by.itacademy.assessment.Assessment;
 import by.itacademy.attend.Attend;
-import by.itacademy.dao.DaoException;
-import by.itacademy.dao.DaoProvider;
-import by.itacademy.dao.DaoProviderImpl;
-import by.itacademy.dao.GenericDao;
+import by.itacademy.dao.*;
 import by.itacademy.grouproom.GroupRoom;
 import by.itacademy.lesson.Lesson;
 import by.itacademy.parent.Parent;
@@ -33,7 +30,7 @@ public class HibernateDaoApplication {
             address.setStreet("Dzerjinskogo");
             address.setBuildingNumber("50");
 
-            final GenericDao<Address> addressDao = daoProvider.provide(Address.class);
+            final Dao<Address> addressDao = daoProvider.provide(Address.class);
 
             addressDao.create(address);
 
@@ -42,7 +39,7 @@ public class HibernateDaoApplication {
             school.setName("IT-Academy");
             school.setAddress(addressDao.read(1));
 
-            final GenericDao<School> schoolDao = daoProvider.provide(School.class);
+            final Dao<School> schoolDao = daoProvider.provide(School.class);
 
             schoolDao.create(school);
 
@@ -50,7 +47,7 @@ public class HibernateDaoApplication {
             final Subject subject = new Subject();
             subject.setName("Java core");
 
-            final GenericDao<Subject> subjectDao = daoProvider.provide(Subject.class);
+            final Dao<Subject> subjectDao = daoProvider.provide(Subject.class);
 
             subjectDao.create(subject);
 
@@ -68,7 +65,7 @@ public class HibernateDaoApplication {
             teacher.setFirstName("Petr");
             teacher.setLastName("Petrov");
 
-            final GenericDao<Teacher> teacherDao = daoProvider.provide(Teacher.class);
+            final Dao<Teacher> teacherDao = daoProvider.provide(Teacher.class);
             teacherDao.create(teacher);
 
 //  Связывание учителя и школы
@@ -89,7 +86,7 @@ public class HibernateDaoApplication {
             parentMother.setFirstName("Inna");
             parentMother.setLastName("Andreeva");
 
-            final GenericDao<Parent> parentDao = daoProvider.provide(Parent.class);
+            final Dao<Parent> parentDao = daoProvider.provide(Parent.class);
             parentDao.create(parentFather);
             parentDao.create(parentMother);
 
@@ -99,7 +96,7 @@ public class HibernateDaoApplication {
             student.setLastName("Andreev");
             student.setParents(List.of(parentDao.read(1), parentDao.read(2)));
 
-            final GenericDao<Student> studentDao = daoProvider.provide(Student.class);
+            final Dao<Student> studentDao = daoProvider.provide(Student.class);
             studentDao.create(student);
 
 //  Cвязывание студента и школы
@@ -117,7 +114,7 @@ public class HibernateDaoApplication {
             studentGroup.setGroupOwner(teacherDao.read(1));
             studentGroup.setSchool(schoolDao.read(1));
 
-            final GenericDao<StudentGroup> studentGroupDao = daoProvider.provide(StudentGroup.class);
+            final Dao<StudentGroup> studentGroupDao = daoProvider.provide(StudentGroup.class);
             studentGroupDao.create(studentGroup);
 
 //  Связывание класса и студента
@@ -153,7 +150,7 @@ public class HibernateDaoApplication {
             schedule.setEndDate(OffsetDateTime.of(2023, 12, 10, 19, 0, 0, 0, ZoneOffset.ofHours(3)));
             schedule.setSchool(schoolDao.read(1));
 
-            final GenericDao<Schedule> scheduleDao = daoProvider.provide(Schedule.class);
+            final Dao<Schedule> scheduleDao = daoProvider.provide(Schedule.class);
             scheduleDao.create(schedule);
 
 //  Создание объекта кабинет и запись в таблицу
@@ -162,7 +159,7 @@ public class HibernateDaoApplication {
             groupRoom.setSchool(schoolDao.read(1));
             groupRoom.setRoomOwner(teacherDao.read(1));
 
-            final GenericDao<GroupRoom> groupRoomDao = daoProvider.provide(GroupRoom.class);
+            final Dao<GroupRoom> groupRoomDao = daoProvider.provide(GroupRoom.class);
             groupRoomDao.create(groupRoom);
 
 //  Создание объекта урок и запись в таблицу
@@ -173,7 +170,7 @@ public class HibernateDaoApplication {
             lesson.setTeacher(teacherDao.read(1));
             lesson.setGroupRoom(groupRoomDao.read(1));
 
-            final GenericDao<Lesson> lessonDao = daoProvider.provide(Lesson.class);
+            final Dao<Lesson> lessonDao = daoProvider.provide(Lesson.class);
             lessonDao.create(lesson);
 
 //  Создание объекта оценка и запись в таблицу
@@ -182,7 +179,7 @@ public class HibernateDaoApplication {
             assessment.setStudent(studentDao.read(1));
             assessment.setAssessment(9);
 
-            final GenericDao<Assessment> assessmentDao = daoProvider.provide(Assessment.class);
+            final Dao<Assessment> assessmentDao = daoProvider.provide(Assessment.class);
             assessmentDao.create(assessment);
 
 //  Создание объекта посещение и запись в таблицу
@@ -191,7 +188,7 @@ public class HibernateDaoApplication {
             attend.setStudent(studentDao.read(1));
             attend.setVisited(true);
 
-            final GenericDao<Attend> attendDao = daoProvider.provide(Attend.class);
+            final Dao<Attend> attendDao = daoProvider.provide(Attend.class);
             attendDao.create(attend);
 
             System.out.println(schoolDao.read(1).toString());
