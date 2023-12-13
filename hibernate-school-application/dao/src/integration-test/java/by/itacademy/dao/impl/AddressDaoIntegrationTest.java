@@ -1,67 +1,111 @@
 package by.itacademy.dao.impl;
 
 import by.itacademy.address.Address;
-import by.itacademy.dao.DaoException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static by.itacademy.dao.impl.TestHibernateUtil.SESSION_FACTORY;
 
-public class AddressDaoIntegrationTest {
+public class AddressDaoIntegrationTest extends BaseDaoIntegrationTest {
 
-    protected static final AddressDao ADDRESS_DAO = new AddressDao(SESSION_FACTORY);
+    protected static AddressDao ADDRESS_DAO;
 
     private static final Address ADDRESS = new Address();
 
     @BeforeAll
+    public static void createDao() {
+        SESSION_FACTORY.openSession();
+        ADDRESS_DAO = new AddressDao(SESSION_FACTORY);
+    }
+
+    @BeforeAll
     public static void createObject() {
+        ADDRESS.setId(1);
         ADDRESS.setCity("Minsk");
         ADDRESS.setStreet("Masherova");
         ADDRESS.setBuildingNumber("38");
     }
 
     @Test
-    void testCreateAddress_happyPath() throws DaoException {
+    void testCreateAddress_happyPath() throws Exception {
         ADDRESS_DAO.create(ADDRESS);
 
-        Assertions.assertEquals("Minsk", ADDRESS_DAO.read(3).getCity());
-        Assertions.assertEquals("Masherova", ADDRESS_DAO.read(3).getStreet());
-        Assertions.assertEquals("38", ADDRESS_DAO.read(3).getBuildingNumber());
+        final ResultSetVerifier verifier = (rs) -> {
+            Integer addressId = rs.getInt("id");
+            String city = rs.getString("city");
+            String street = rs.getString("street");
+            String buildingNumber = rs.getString("building_number");
+
+            Assertions.assertEquals(ADDRESS.getId(), addressId);
+            Assertions.assertEquals(ADDRESS.getCity(), city);
+            Assertions.assertEquals(ADDRESS.getStreet(), street);
+            Assertions.assertEquals(ADDRESS.getBuildingNumber(), buildingNumber);
+        };
+
+        verifyCreatedRow("address", ADDRESS.getId(), verifier);
 
     }
 
     @Test
-    void testReadAddress_happyPath() throws DaoException {
-        Assertions.assertEquals("Brest", ADDRESS_DAO.read(1).getCity());
-        Assertions.assertEquals("Dzerjinskogo", ADDRESS_DAO.read(1).getStreet());
-        Assertions.assertEquals("50", ADDRESS_DAO.read(1).getBuildingNumber());
+    void testReadAddress_happyPath() throws Exception {
+        ADDRESS_DAO.create(ADDRESS);
+
+        final Address readAddress = new Address();
+        readAddress.setId(ADDRESS_DAO.read(1).getId());
+        readAddress.setCity(ADDRESS_DAO.read(1).getCity());
+        readAddress.setStreet(ADDRESS_DAO.read(1).getStreet());
+        readAddress.setBuildingNumber(ADDRESS_DAO.read(1).getBuildingNumber());
+
+        final ResultSetVerifier verifier = (rs) -> {
+            Integer addressId = rs.getInt("id");
+            String city = rs.getString("city");
+            String street = rs.getString("street");
+            String buildingNumber = rs.getString("building_number");
+
+            Assertions.assertEquals(readAddress.getId(), addressId);
+            Assertions.assertEquals(readAddress.getCity(), city);
+            Assertions.assertEquals(readAddress.getStreet(), street);
+            Assertions.assertEquals(readAddress.getBuildingNumber(), buildingNumber);
+        };
+
+        verifyCreatedRow("address", ADDRESS.getId(), verifier);
     }
 
     @Test
-    void testUpdateAddress_happyPath() throws DaoException {
-        ADDRESS_DAO.create(ADDRESS);
+    void testUpdateAddress_happyPath() throws Exception {
+        final Address updateAddress = new Address();
+        updateAddress.setId(1);
+        updateAddress.setCity("Minsk");
+        updateAddress.setStreet("Sovetskaya");
+        updateAddress.setBuildingNumber("48");
 
-        final Address addressUpdate = new Address();
-        addressUpdate.setId(3);
-        addressUpdate.setCity("Minsk");
-        addressUpdate.setStreet("Masherova");
-        addressUpdate.setBuildingNumber("36");
+        ADDRESS_DAO.update(updateAddress);
 
-        ADDRESS_DAO.update(addressUpdate);
+        final ResultSetVerifier verifier = (rs) -> {
+            Integer addressId = rs.getInt("id");
+            String city = rs.getString("city");
+            String street = rs.getString("street");
+            String buildingNumber = rs.getString("building_number");
 
-        Assertions.assertEquals("Minsk", ADDRESS_DAO.read(3).getCity());
-        Assertions.assertEquals("Masherova", ADDRESS_DAO.read(3).getStreet());
-        Assertions.assertEquals("36", ADDRESS_DAO.read(3).getBuildingNumber());
+            Assertions.assertEquals(updateAddress.getId(), addressId);
+            Assertions.assertEquals(updateAddress.getCity(), city);
+            Assertions.assertEquals(updateAddress.getStreet(), street);
+            Assertions.assertEquals(updateAddress.getBuildingNumber(), buildingNumber);
+        };
+
+        verifyCreatedRow("address", ADDRESS.getId(), verifier);
     }
 
     @Test
-    void testDeleteAddress_happyPath() throws DaoException {
-        ADDRESS_DAO.create(ADDRESS);
+    void testDeleteAddress_happyPath() throws Exception {
+        ADDRESS_DAO.delete(1);
 
-        ADDRESS_DAO.delete(3);
+        final ResultSetVerifier verifier = (rs) -> {
+            Integer addressId = rs.getInt("id");
 
-        Assertions.assertNull(ADDRESS_DAO.read(3));
+            Assertions.assertNull(addressId);
+        };
+
     }
-
 }

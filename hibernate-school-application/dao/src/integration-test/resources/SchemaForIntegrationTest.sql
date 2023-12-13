@@ -6,11 +6,6 @@ create table if not exists address
 	building_number varchar(10) not null
 );
 
-insert into address (city, street, building_number) values
-('Brest', 'Dzerjinskogo', '50'),
-('Brest', 'Masherova', '30');
-
-
 create table if not exists school
 (
 	id              int4 generated always as identity primary key,
@@ -20,10 +15,6 @@ create table if not exists school
 	constraint fk__school__address__id foreign key (address_id) references address (id)
 );
 
-insert into school (name, address_id) values
-('IT-Academy', 1),
-('IT-Academy Teen', 1);
-
 create table if not exists subject
 (
 	id              int4 generated always as identity primary key,
@@ -31,9 +22,6 @@ create table if not exists subject
 
 	constraint uq__subject__name unique (name)
 );
-
-insert into subject (name) values
-('Java core');
 
 create table if not exists school_subject
 (
