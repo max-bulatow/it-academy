@@ -1,21 +1,23 @@
 package by.itacademy.dao.impl;
 
 import by.itacademy.address.Address;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.hibernate.Session;
+import org.junit.jupiter.api.*;
 
 import static by.itacademy.dao.impl.TestHibernateUtil.SESSION_FACTORY;
 
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AddressDaoIntegrationTest extends BaseDaoIntegrationTest {
+
+    private Session session;
 
     protected static AddressDao ADDRESS_DAO;
 
-    private static final Address ADDRESS = new Address();
+    protected static final Address ADDRESS = new Address();
 
     @BeforeAll
     public static void createDao() {
-        SESSION_FACTORY.openSession();
         ADDRESS_DAO = new AddressDao(SESSION_FACTORY);
     }
 
@@ -27,7 +29,20 @@ public class AddressDaoIntegrationTest extends BaseDaoIntegrationTest {
         ADDRESS.setBuildingNumber("38");
     }
 
+    @BeforeEach
+    public void openSession() {
+        session = SESSION_FACTORY.openSession();
+    }
+
+    @AfterEach
+    public void closeSession() {
+        if (session != null) {
+            session.close();
+        }
+    }
+
     @Test
+    @Order(1)
     void testCreateAddress_happyPath() throws Exception {
         ADDRESS_DAO.create(ADDRESS);
 
@@ -44,13 +59,11 @@ public class AddressDaoIntegrationTest extends BaseDaoIntegrationTest {
         };
 
         verifyCreatedRow("address", ADDRESS.getId(), verifier);
-
     }
 
     @Test
+    @Order(2)
     void testReadAddress_happyPath() throws Exception {
-        ADDRESS_DAO.create(ADDRESS);
-
         final Address readAddress = new Address();
         readAddress.setId(ADDRESS_DAO.read(1).getId());
         readAddress.setCity(ADDRESS_DAO.read(1).getCity());
@@ -73,6 +86,7 @@ public class AddressDaoIntegrationTest extends BaseDaoIntegrationTest {
     }
 
     @Test
+    @Order(3)
     void testUpdateAddress_happyPath() throws Exception {
         final Address updateAddress = new Address();
         updateAddress.setId(1);
@@ -94,10 +108,11 @@ public class AddressDaoIntegrationTest extends BaseDaoIntegrationTest {
             Assertions.assertEquals(updateAddress.getBuildingNumber(), buildingNumber);
         };
 
-        verifyCreatedRow("address", ADDRESS.getId(), verifier);
+        verifyCreatedRow("address", updateAddress.getId(), verifier);
     }
 
     @Test
+    @Order(4)
     void testDeleteAddress_happyPath() throws Exception {
         ADDRESS_DAO.delete(1);
 
@@ -106,6 +121,5 @@ public class AddressDaoIntegrationTest extends BaseDaoIntegrationTest {
 
             Assertions.assertNull(addressId);
         };
-
     }
 }

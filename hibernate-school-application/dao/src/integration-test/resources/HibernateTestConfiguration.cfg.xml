@@ -7,7 +7,7 @@
         <!-- Database connection settings -->
         <property name="hibernate.connection.driver_class">org.h2.Driver</property>
         <property name="hibernate.connection.url">jdbc:h2:mem:school;INIT=runscript from
-            'src/integration-test/resources/SchemaForIntegrationTest.sql'
+            'src/integration-test/resources/school-schema.sql'
         </property>
         <property name="hibernate.connection.username">postgres</property>
         <property name="hibernate.connection.password">postgres</property>

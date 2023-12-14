@@ -17,9 +17,9 @@ import org.hibernate.cfg.Configuration;
 
 public class TestHibernateUtil {
 
-    protected static final SessionFactory SESSION_FACTORY = buildSessionFactory();
+    protected static SessionFactory SESSION_FACTORY = buildSessionFactory();
 
-    private static SessionFactory buildSessionFactory() {
+    public static SessionFactory buildSessionFactory() {
         try {
             Configuration configuration = new Configuration();
 

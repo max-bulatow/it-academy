@@ -22,7 +22,7 @@ import java.util.List;
 
 public class HibernateDaoApplication {
     public static void main(final String[] args) {
-        try (DaoProvider daoProvider = new DaoProviderImpl(HibernateUtil.getSessionFactory())) {
+        try (final DaoProvider daoProvider = new DaoProviderImpl(HibernateUtil.getSessionFactory())) {
 
 //  Создание объекта address и запись в таблицу
             final Address address = new Address();
