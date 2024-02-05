@@ -1,0 +1,28 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: postgres
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/school
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  mvc:
+    favicon:
+      enabled: false
+
+springdoc:
+  api-docs:
+    # Specify the path of the OpenAPI documentation
+    path: /api-docs
+  swagger-ui:
+    # Specify the path of the Swagger UI
+    path: /swagger-ui.html
+    # Enable or disable Swagger UI
+    enabled: true
+    operationsSorter: method
+    tagsSorter: alpha
